@@ -46,6 +46,22 @@ test('usagePass', function (t) {
     t.end();
 });
 
+test('usageWithZeroValue', function (t) {
+    var r = checkUsage(function () {
+        return optimist('-x 10 -y 0'.split(' '))
+            .usage('Usage: $0 -x NUM -y NUM')
+            .demand(['x','y'])
+            .argv;
+    });
+    t.same(r, {
+        result : { x : 10, y : 0, _ : [], $0 : './usage' },
+        errors : [],
+        logs : [],
+        exit : false,
+    });
+    t.end();
+});
+
 test('checkPass', function (t) {
     var r = checkUsage(function () {
         return optimist('-x 10 -y 20'.split(' '))
