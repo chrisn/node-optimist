@@ -7,7 +7,14 @@ and -whistlz of program usage but think optstrings are a waste of time.
 
 With optimist, option parsing doesn't have to suck (as much).
 
-[![build status](https://secure.travis-ci.org/substack/node-optimist.png)](http://travis-ci.org/substack/node-optimist)
+This fork of [optimist](https://github.com/fsubstack/node-optimist) introduces
+the following changes:
+
+* `.require()` as synonym for `.demand()`
+* `.strict()` reports errors for unknown options (i.e., options with no
+  description)
+* `.requiresArg()` to specify arguments which require values (default optimist
+  behaviour is to set these values to `true`)
 
 examples
 ========
@@ -36,8 +43,6 @@ else {
     
     $ ./xup.js --rif 12 --xup 8.1
     Sell the xupptumblers
-
-![This one's optimistic.](http://substack.net/images/optimistic.png)
 
 But wait! There's more! You can do short options:
 -------------------------------------------------
@@ -551,16 +556,12 @@ installation
 ============
 
 With [npm](http://github.com/isaacs/npm), just do:
-    npm install optimist
+
+    npm install git+https://github.com/chrisn/node-optimist.git
  
 or clone this project on github:
 
-    git clone http://github.com/substack/node-optimist.git
-
-To run the tests with [expresso](http://github.com/visionmedia/expresso),
-just do:
-    
-    expresso
+    git clone https://github.com/chrisn/node-optimist.git
 
 inspired By
 ===========
