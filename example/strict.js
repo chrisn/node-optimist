@@ -4,10 +4,12 @@ var argv = optimist.usage('This is my awesome program', {
   'foo': {
     description: 'Foo option',
     alias: 'f',
+    requiresArg: true
   },
   'bar': {
     description: 'Bar option',
-    alias: 'b'
+    alias: 'b',
+    requiresArg: true
   }
 }).strict().argv;
 

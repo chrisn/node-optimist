@@ -308,6 +308,40 @@ up in `argv._`.
 
 If `key` is an Array, demand each element.
 
+.requiresArg(key)
+-----------------
+
+Specifies either a single option key (string), or an array of options that
+must be followed by option values. If any option value is missing, show the
+usage information and exit.
+
+````javascript
+#!/usr/bin/env node
+var argv = require('optimist')
+    .usage('Count the lines in a file.\nUsage: $0')
+    .demand('f')
+    .alias('f', 'file')
+    .describe('f', 'Load a file')
+    .requiresArg('f')
+    .argv;
+
+// etc.
+````
+
+***
+
+    $ node line_count.js --file
+    Count the lines in a file.
+    Usage: node ./line_count.js
+
+    Options:
+      -f, --file  Load a file  [required]
+
+    Missing argument value: f
+
+    $ node line_count.js --file line_count.js
+    20
+
 .describe(key, desc)
 --------------------
 

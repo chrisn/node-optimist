@@ -42,7 +42,8 @@ function Argv (processArgs, cwd) {
         boolean: [],
         string: [],
         alias: {},
-        default: []
+        default: [],
+        requiresArg: []
     };
     
     self.boolean = function (bools) {
@@ -97,6 +98,11 @@ function Argv (processArgs, cwd) {
         return self;
     };
     
+    self.requiresArg = function (requiresArgs) {
+        options.requiresArg.push.apply(options.requiresArg, [].concat(requiresArgs));
+        return self;
+    };
+
     var usage;
     self.usage = function (msg, opts) {
         if (!opts && typeof msg === 'object') {
@@ -163,6 +169,10 @@ function Argv (processArgs, cwd) {
             var desc = opt.describe || opt.description || opt.desc;
             if (desc) {
                 self.describe(key, desc);
+            }
+
+            if (opt.requiresArg) {
+                self.requiresArg(key);
             }
         }
         
@@ -290,6 +300,7 @@ function Argv (processArgs, cwd) {
     });
     
     function parseArgs (args) {
+        var message;
         var argv = minimist(args, options);
         argv.$0 = self.$0;
         
@@ -331,7 +342,28 @@ function Argv (processArgs, cwd) {
                 fail("Unknown argument: " + unknown[0]);
             }
             else if (unknown.length > 1) {
-                var message = "Unknown arguments: " + unknown.join(", ");
+                message = "Unknown arguments: " + unknown.join(", ");
+                fail(message);
+            }
+        }
+
+        if (options.requiresArg.length > 0) {
+            var missing = [];
+
+            options.requiresArg.forEach(function(key) {
+                var value = argv[key];
+
+                // minimist sets --foo value to true / --no-foo to false
+                if (value === true || value === false) {
+                    missing.push(key);
+                }
+            });
+
+            if (missing.length == 1) {
+                fail("Missing argument value: " + missing[0]);
+            }
+            else if (missing.length > 1) {
+                message = "Missing argument values: " + missing.join(", ");
                 fail(message);
             }
         }

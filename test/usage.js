@@ -415,6 +415,102 @@ test('usageStrictPass', function (t) {
     t.end();
 });
 
+test('usageRequiresArgOptionFail', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option', alias: 'f', requiresArg: true },
+            bar: { description: 'bar option', alias: 'b', requiresArg: true }
+        };
+
+        return optimist('-f --bar 20'.split(' '))
+            .usage('Usage: $0 [options]', opts)
+            .strict()
+            .argv;
+    });
+    t.same(
+        r.result,
+        { f : true, foo : true, b : 20, bar : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage [options]',
+            'Options:',
+            '  --foo, -f  foo option',
+            '  --bar, -b  bar option',
+            'Missing argument value: foo',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('usageRequiresArgOptionFailMultiple', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option', alias: 'f', requiresArg: true },
+            bar: { description: 'bar option', alias: 'b', requiresArg: true }
+        };
+
+        return optimist('-f --bar'.split(' '))
+            .usage('Usage: $0 [options]', opts)
+            .strict()
+            .argv;
+    });
+    t.same(
+        r.result,
+        { f : true, foo : true, b : true, bar : true, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage [options]',
+            'Options:',
+            '  --foo, -f  foo option',
+            '  --bar, -b  bar option',
+            'Missing argument values: foo, bar',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('usageRequiresArgFail', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option', alias: 'f' },
+            bar: { description: 'bar option', alias: 'b' }
+        };
+
+        return optimist('-f --bar 20'.split(' '))
+            .usage('Usage: $0 [options]', opts)
+            .requiresArg(['foo', 'bar'])
+            .argv;
+    });
+    t.same(
+        r.result,
+        { f : true, foo : true, b : 20, bar : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage [options]',
+            'Options:',
+            '  --foo, -f  foo option',
+            '  --bar, -b  bar option',
+            'Missing argument value: foo',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
 test('rebase', function (t) {
     t.equal(
         optimist.rebase('/home/substack', '/home/substack/foo/bar/baz'),
