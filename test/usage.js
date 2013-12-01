@@ -119,6 +119,25 @@ test('usageWithOptions', function (t) {
     t.end();
 });
 
+test('usageWithOptionsAlias', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { required: true, alias: 'f' },
+            bar: { demand: true, alias: 'b' }
+        };
+        return optimist('-f 10 -b 20'.split(' '))
+            .usage('Usage: $0 --foo NUM --bar NUM', opts)
+            .argv;
+    });
+    t.same(r, {
+        result : { f : 10, foo : 10, b : 20, bar : 20, _ : [], $0 : './usage' },
+        errors : [],
+        logs : [],
+        exit : false,
+    });
+    t.end();
+});
+
 test('checkPass', function (t) {
     var r = checkUsage(function () {
         return optimist('-x 10 -y 20'.split(' '))
