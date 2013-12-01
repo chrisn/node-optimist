@@ -427,11 +427,13 @@ Format usage output to wrap at `columns` many columns.
 ---------
 
 Any command-line argument given that does not have a corresponding
-description will bw reported as an error.
+description will be reported as an error.
+
+line_count.js
 
 ````javascript
 #!/usr/bin/env node
-// line_count.js
+
 var opts = {
   f: {
     alias: 'file',
@@ -439,6 +441,7 @@ var opts = {
     required: true
   },
 };
+
 var argv = require('optimist')
     .usage('Count the lines in a file.\nUsage: $0', opts)
     .strict()
