@@ -330,6 +330,91 @@ test('defaultHash', function (t) {
     t.end();
 });
 
+test('usageStrictFail', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option', alias: 'f' },
+            bar: { description: 'bar option', alias: 'b' }
+        };
+
+        return optimist('-f 10 --bar 20 --baz 30'.split(' '))
+            .usage('Usage: $0 [options]', opts)
+            .strict()
+            .argv;
+    });
+    t.same(
+        r.result,
+        { f : 10, foo : 10, b : 20, bar : 20, baz : 30, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage [options]',
+            'Options:',
+            '  --foo, -f  foo option',
+            '  --bar, -b  bar option',
+            'Unknown argument: baz',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('usageStrictFailMultiple', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option', alias: 'f' },
+            bar: { description: 'bar option', alias: 'b' }
+        };
+
+        return optimist('-f 10 --bar 20 --baz 30 -q 40'.split(' '))
+            .usage('Usage: $0 [options]', opts)
+            .strict()
+            .argv;
+    });
+    t.same(
+        r.result,
+        { f : 10, foo : 10, b : 20, bar : 20, baz : 30, q : 40, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage [options]',
+            'Options:',
+            '  --foo, -f  foo option',
+            '  --bar, -b  bar option',
+            'Unknown arguments: baz, q',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('usageStrictPass', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option' },
+            bar: { description: 'bar option' }
+        };
+
+        return optimist('--foo 10 --bar 20'.split(' '))
+            .usage('Usage: $0 [options]', opts)
+            .strict()
+            .argv;
+    });
+    t.same(r, {
+        result : { foo : 10, bar : 20, _ : [], $0 : './usage' },
+        errors : [],
+        logs : [],
+        exit : false,
+    });
+    t.end();
+});
+
 test('rebase', function (t) {
     t.equal(
         optimist.rebase('/home/substack', '/home/substack/foo/bar/baz'),

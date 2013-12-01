@@ -384,6 +384,41 @@ If `key` is an Array, interpret all the elements as strings.
 
 Format usage output to wrap at `columns` many columns.
 
+.strict()
+---------
+
+Any command-line argument given that does not have a corresponding
+description will bw reported as an error.
+
+````javascript
+#!/usr/bin/env node
+// line_count.js
+var opts = {
+  f: {
+    alias: 'file',
+    description: 'Load a file',
+    required: true
+  },
+};
+var argv = require('optimist')
+    .usage('Count the lines in a file.\nUsage: $0', opts)
+    .strict()
+    .argv;
+
+// etc.
+````
+
+***
+
+    $ node line_count.js --file line_count.js --foo bar
+    Count the lines in a file.
+    Usage: node ./line_count.js
+
+    Options:
+      -f, --file  Load a file  [required]
+
+    Unknown argument: foo
+
 .help()
 -------
 
