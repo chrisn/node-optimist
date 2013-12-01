@@ -80,7 +80,7 @@ function Argv (processArgs, cwd) {
     };
     
     var demanded = {};
-    self.demand = function (keys) {
+    self.demand = self.require = function (keys) {
         if (typeof keys == 'number') {
             if (!demanded._) demanded._ = 0;
             demanded._ += keys;
@@ -148,7 +148,7 @@ function Argv (processArgs, cwd) {
         }
         else {
             if (opt.alias) self.alias(key, opt.alias);
-            if (opt.demand) self.demand(key);
+            if (opt.demand || opt.required) self.demand(key);
             if (typeof opt.default !== 'undefined') {
                 self.default(key, opt.default);
             }

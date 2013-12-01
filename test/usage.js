@@ -62,6 +62,63 @@ test('usageWithZeroValue', function (t) {
     t.end();
 });
 
+test('usageWithRequire', function (t) {
+    var r = checkUsage(function () {
+        return optimist('-x 10 -z 20'.split(' '))
+            .usage('Usage: $0 -x NUM -y NUM')
+            .require(['x','y'])
+            .argv;
+    });
+    t.same(
+        r.result,
+        { x : 10, z : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage -x NUM -y NUM',
+            'Options:',
+            '  -x  [required]',
+            '  -y  [required]',
+            'Missing required arguments: y',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('usageWithOptions', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { required: true },
+            bar: { demand: true }
+        };
+        return optimist('--foo 10 --baz 20'.split(' '))
+            .usage('Usage: $0 --foo NUM --bar NUM', opts)
+            .argv;
+    });
+    t.same(
+        r.result,
+        { foo : 10, baz : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage --foo NUM --bar NUM',
+            'Options:',
+            '  --foo  [required]',
+            '  --bar  [required]',
+            'Missing required arguments: bar',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
 test('checkPass', function (t) {
     var r = checkUsage(function () {
         return optimist('-x 10 -y 20'.split(' '))
