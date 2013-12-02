@@ -27,7 +27,7 @@ function Argv (processArgs, cwd) {
         .map(function (x) {
             var b = rebase(cwd, x);
             return x.match(/^\//) && b.length < x.length
-                ? b : x
+                ? b : x;
         })
         .join(' ')
     ;
@@ -209,7 +209,7 @@ function Argv (processArgs, cwd) {
         failMessage = message;
         showHelpOnFail = enabled;
         return self;
-    }
+    };
 
     var version = null;
     var versionOpt = null;
@@ -218,14 +218,14 @@ function Argv (processArgs, cwd) {
         versionOpt = opt;
         self.describe(opt, msg || 'Show version number');
         return self;
-    }
+    };
 
     var helpOpt = null;
     self.addHelpOpt = function (opt, msg) {
         helpOpt = opt;
         self.describe(opt, msg || 'Show help');
         return self;
-    }
+    };
     
     self.showHelp = function (fn) {
         if (!fn) fn = console.error;
@@ -256,7 +256,7 @@ function Argv (processArgs, cwd) {
         var switches = keys.reduce(function (acc, key) {
             acc[key] = [ key ].concat(options.alias[key] || [])
                 .map(function (sw) {
-                    return (sw.length > 1 ? '--' : '-') + sw
+                    return (sw.length > 1 ? '--' : '-') + sw;
                 })
                 .join(', ')
             ;
@@ -303,12 +303,10 @@ function Argv (processArgs, cwd) {
                 type,
                 demanded[key]
                     ? '[required]'
-                    : null
-                ,
+                    : null,
                 options.default[key] !== undefined
                     ? '[default: ' + JSON.stringify(options.default[key]) + ']'
                     : null
-                ,
             ].filter(Boolean).join('  ');
             
             var body = [ desc, extra ].filter(Boolean).join('  ');
@@ -316,7 +314,7 @@ function Argv (processArgs, cwd) {
             if (wrap) {
                 var dlines = desc.split('\n');
                 var dlen = dlines.slice(-1)[0].length
-                    + (dlines.length === 1 ? prelude.length : 0)
+                    + (dlines.length === 1 ? prelude.length : 0);
                 
                 body = desc + (dlen + extra.length > wrap - 2
                     ? '\n'
@@ -335,7 +333,7 @@ function Argv (processArgs, cwd) {
     };
     
     Object.defineProperty(self, 'argv', {
-        get : function () { return parseArgs(processArgs) },
+        get : function () { return parseArgs(processArgs); },
         enumerable : true,
     });
     
@@ -399,7 +397,7 @@ function Argv (processArgs, cwd) {
         }
 
         if (options.requiresArg.length > 0) {
-            var missing = [];
+            missing = [];
 
             options.requiresArg.forEach(function(key) {
                 var value = argv[key];
@@ -426,7 +424,7 @@ function Argv (processArgs, cwd) {
                 }
             }
             catch (err) {
-                fail(err)
+                fail(err);
             }
         });
 
@@ -436,12 +434,12 @@ function Argv (processArgs, cwd) {
     function longest (xs) {
         return Math.max.apply(
             null,
-            xs.map(function (x) { return x.length })
+            xs.map(function (x) { return x.length; })
         );
     }
     
     return self;
-};
+}
 
 // rebase an absolute path to a relative one with respect to a base directory
 // exported for tests
@@ -454,7 +452,7 @@ function rebase (base, dir) {
     ds.splice(0, i); bs.splice(0, i);
     
     var p = path.normalize(
-        bs.map(function () { return '..' }).concat(ds).join('/')
+        bs.map(function () { return '..'; }).concat(ds).join('/')
     ).replace(/\/$/,'').replace(/^$/, '.');
     return p.match(/^[.\/]/) ? p : './' + p;
-};
+}

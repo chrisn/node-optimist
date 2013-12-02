@@ -703,7 +703,7 @@ function checkUsage (f) {
     process._env = process.env;
     process._argv = process.argv;
 
-    process.exit = function (t) { exit = true };
+    process.exit = function (t) { exit = true; };
     process.env = Hash.merge(process.env, { _ : 'node' });
     process.argv = [ './usage' ];
 
@@ -711,9 +711,9 @@ function checkUsage (f) {
     var logs = [];
 
     console._error = console.error;
-    console.error = function (msg) { errors.push(msg) };
+    console.error = function (msg) { errors.push(msg); };
     console._log = console.log;
-    console.log = function (msg) { logs.push(msg) };
+    console.log = function (msg) { logs.push(msg); };
 
     var result = f();
 
@@ -730,4 +730,4 @@ function checkUsage (f) {
         exit : exit,
         result : result,
     };
-};
+}

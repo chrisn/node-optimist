@@ -45,7 +45,7 @@ function testCmd (cmd, args) {
 
     return function (t) {
         var to = setTimeout(function () {
-            assert.fail('Never got stdout data.')
+            assert.fail('Never got stdout data.');
         }, 5000);
         
         var oldDir = process.cwd();
