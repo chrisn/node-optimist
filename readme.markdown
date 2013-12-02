@@ -17,6 +17,8 @@ the following changes:
   arguments are given
 * `.requiresArg()` to specify arguments which require values (default optimist
   behaviour is to set these values to `true`)
+* `.help()` and `.version()` to enable default handling of `--help` and
+  `--version` options.
 
 examples
 ========
@@ -463,6 +465,86 @@ var argv = require('optimist')
 
     Unknown argument: foo
 
+.help([option, [description]])
+------------------------------
+
+Add an option (e.g., `--help`) that displays the usage string and exits the
+process. If present, the `message` parameter customises the description of the
+help option in the usage string.
+
+If invoked without parameters, `.help` returns the generated usage string.
+
+````javascript
+#!/usr/bin/env node
+
+var opts = {
+  f: {
+    alias: 'file',
+    description: 'Load a file',
+    required: true
+  },
+};
+
+var argv = require('optimist')
+    .usage('Count the lines in a file.\nUsage: $0', opts)
+    .help('help', 'Show usage')
+    .strict()
+    .argv;
+
+// etc.
+````
+
+***
+
+    $ node line_count.js --help
+    Count the lines in a file.
+    Usage: node ./line_count.js
+
+    Options:
+      --help      Show usage
+      -f, --file  Load a file  [required]
+
+.version(version, option, [description])
+----------------------------------------
+
+Add an option (e.g., `--version`) that displays the given version number and
+exits the process. If present, the `message` parameter customises the
+description of the version option in the usage string.
+
+````javascript
+#!/usr/bin/env node
+
+var opts = {
+  f: {
+    alias: 'file',
+    description: 'Load a file',
+    required: true
+  },
+};
+
+var argv = require('optimist')
+  .usage('Count the lines in a file.\nUsage: $0', opts)
+  .help('help', 'Show usage')
+  .version('1.0', 'version', 'Show version')
+  .strict()
+  .argv;
+
+// etc.
+````
+
+***
+
+  $ node line_count.js --version
+  1.0
+
+  $ node line_count.js --help
+  Usage: node ./line_count.js
+
+  Options:
+    --help      Show usage
+    --version   Show version
+    -f, --file  Load a file  [required]
+
 .showHelpOnFail(enable, [message])
 ----------------------------------
 
@@ -491,11 +573,6 @@ var argv = require('optimist')
     $ node line_count.js --file
     Missing argument value: f
     Specify --file <filename> to load a file
-
-.help()
--------
-
-Return the generated usage string.
 
 .showHelp(fn=console.error)
 ---------------------------

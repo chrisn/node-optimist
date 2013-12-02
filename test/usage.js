@@ -586,6 +586,99 @@ test('showHelpOnFailDefault', function (t) {
     t.end();
 });
 
+test('usageHelp', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option' },
+            bar: { description: 'bar option' }
+        };
+
+        return optimist(['--help'])
+            .usage('Usage: $0 [options]')
+            .help('help')
+            .alias('help', 'h')
+            .version('1.0.1', 'version')
+            .alias('version', 'V')
+            .options(opts)
+            .argv;
+    });
+    t.same(r.result, { help : true, h : true, _ : [], $0 : './usage' });
+    t.same(
+        r.logs.join('\n').split(/\n/),
+        [
+            'Usage: ./usage [options]',
+            '',
+            'Options:',
+            '  --help, -h     Show help          ',
+            '  --version, -V  Show version number',
+            '  --foo          foo option         ',
+            '  --bar          bar option         ',
+            ''
+        ]
+    );
+    t.same(r.errors, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('usageHelpWithMessage', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option' },
+            bar: { description: 'bar option' }
+        };
+
+        return optimist(['--help'])
+            .usage('Usage: $0 [options]')
+            .help('help', 'Show usage')
+            .alias('help', 'h')
+            .version('1.0.1', 'version', 'Show version')
+            .alias('version', 'V')
+            .options(opts)
+            .argv;
+    });
+    t.same(r.result, { help : true, h : true, _ : [], $0 : './usage' });
+    t.same(
+        r.logs.join('\n').split(/\n/),
+        [
+            'Usage: ./usage [options]',
+            '', 
+            'Options:',
+            '  --help, -h     Show usage  ',
+            '  --version, -V  Show version',
+            '  --foo          foo option  ',
+            '  --bar          bar option  ',
+            ''
+        ]
+    );
+    t.same(r.errors, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('usageVersion', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { description: 'foo option' },
+            bar: { description: 'bar option' }
+        };
+
+        return optimist(['--version'])
+            .usage('Usage: $0 [options]')
+            .help('help', 'Show usage')
+            .alias('help', 'h')
+            .version('1.0.1', 'version', 'Show version number')
+            .alias('version', 'V')
+            .options(opts)
+            .argv;
+    });
+    t.same(r.result, { version : true, V : true, _ : [], $0 : './usage' });
+    t.same(r.logs, ['1.0.1']);
+    t.same(r.errors, []);
+    t.ok(r.exit);
+    t.end();
+});
+
 test('rebase', function (t) {
     t.equal(
         optimist.rebase('/home/substack', '/home/substack/foo/bar/baz'),

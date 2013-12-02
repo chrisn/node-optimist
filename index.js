@@ -210,6 +210,22 @@ function Argv (processArgs, cwd) {
         showHelpOnFail = enabled;
         return self;
     }
+
+    var version = null;
+    var versionOpt = null;
+    self.version = function (ver, opt, msg) {
+        version = ver;
+        versionOpt = opt;
+        self.describe(opt, msg || 'Show version number');
+        return self;
+    }
+
+    var helpOpt = null;
+    self.addHelpOpt = function (opt, msg) {
+        helpOpt = opt;
+        self.describe(opt, msg || 'Show help');
+        return self;
+    }
     
     self.showHelp = function (fn) {
         if (!fn) fn = console.error;
@@ -217,6 +233,10 @@ function Argv (processArgs, cwd) {
     };
     
     self.help = function () {
+        if (arguments.length > 0) {
+            return self.addHelpOpt.apply(self, arguments);
+        }
+
         var keys = Object.keys(
             Object.keys(descriptions)
             .concat(Object.keys(demanded))
@@ -323,7 +343,18 @@ function Argv (processArgs, cwd) {
         var message;
         var argv = minimist(args, options);
         argv.$0 = self.$0;
-        
+
+        Object.keys(argv).forEach(function(key) {
+            if (key === helpOpt) {
+                self.showHelp(console.log);
+                process.exit(0);
+            }
+            else if (key === versionOpt) {
+                console.log(version);
+                process.exit(0);
+            }
+        });
+
         if (demanded._ && argv._.length < demanded._) {
             fail('Not enough non-option arguments: got '
                 + argv._.length + ', need at least ' + demanded._
@@ -398,7 +429,7 @@ function Argv (processArgs, cwd) {
                 fail(err)
             }
         });
-        
+
         return argv;
     }
     
