@@ -13,6 +13,8 @@ the following changes:
 * `.require()` as synonym for `.demand()`
 * `.strict()` reports errors for unknown options (i.e., options with no
   description)
+* `.showHelpOnFail()` controls whether the usage message is output if invalid
+  arguments are given
 * `.requiresArg()` to specify arguments which require values (default optimist
   behaviour is to set these values to `true`)
 
@@ -460,6 +462,35 @@ var argv = require('optimist')
       -f, --file  Load a file  [required]
 
     Unknown argument: foo
+
+.showHelpOnFail(enable, [message])
+----------------------------------
+
+By default, optimist outputs a usage string if any error is detected. Use the
+`.showHelpOnFail` method to customize this behaviour. if `enable` is `false`,
+the usage string is not output. If the `message` parameter is present, this
+message is output after the error message.
+
+line_count.js
+
+````javascript
+#!/usr/bin/env node
+var argv = require('optimist')
+    .usage('Count the lines in a file.\nUsage: $0')
+    .demand('f')
+    .alias('f', 'file')
+    .describe('f', 'Load a file')
+    .showHelpOnFail(false, "Specify --file <filename> to load a file")
+    .argv;
+
+// etc.
+````
+
+***
+
+    $ node line_count.js --file
+    Missing argument value: f
+    Specify --file <filename> to load a file
 
 .help()
 -------

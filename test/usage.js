@@ -511,6 +511,81 @@ test('usageRequiresArgFail', function (t) {
     t.end();
 });
 
+test('showHelpOnFailWithMessage', function (t) {
+    var r = checkUsage(function () {
+        return optimist('-x 10 -z 20'.split(' '))
+            .usage('Usage: $0 -x NUM -y NUM')
+            .demand(['x','y'])
+            .showHelpOnFail(false, 'Specify --help for available options')
+            .argv;
+    });
+    t.same(
+        r.result,
+        { x : 10, z : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors,
+        [
+            'Missing required arguments: y',
+            'Specify --help for available options'
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('showHelpOnFailWithoutMessage', function (t) {
+    var r = checkUsage(function () {
+        return optimist('-x 10 -z 20'.split(' '))
+            .usage('Usage: $0 -x NUM -y NUM')
+            .demand(['x','y'])
+            .showHelpOnFail(false)
+            .argv;
+    });
+    t.same(
+        r.result,
+        { x : 10, z : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors,
+        [ 'Missing required arguments: y' ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+test('showHelpOnFailDefault', function (t) {
+    var r = checkUsage(function () {
+        return optimist('-x 10 -z 20'.split(' '))
+            .usage('Usage: $0 -x NUM -y NUM')
+            .demand(['x','y'])
+            .showHelpOnFail()
+            .argv;
+    });
+    t.same(
+        r.result,
+        { x : 10, z : 20, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Usage: ./usage -x NUM -y NUM',
+            'Options:',
+            '  -x  [required]',
+            '  -y  [required]',
+            'Missing required arguments: y',
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
 test('rebase', function (t) {
     t.equal(
         optimist.rebase('/home/substack', '/home/substack/foo/bar/baz'),
