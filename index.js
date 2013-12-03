@@ -325,7 +325,7 @@ function Argv (processArgs, cwd) {
                 );
             }
             
-            help.push(prelude + body);
+            help.push((prelude + body).trimRight());
         });
         
         help.push('');

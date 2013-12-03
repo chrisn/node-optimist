@@ -640,10 +640,10 @@ test('usageHelp', function (t) {
             'Usage: ./usage [options]',
             '',
             'Options:',
-            '  --help, -h     Show help          ',
+            '  --help, -h     Show help',
             '  --version, -V  Show version number',
-            '  --foo          foo option         ',
-            '  --bar          bar option         ',
+            '  --foo          foo option',
+            '  --bar          bar option',
             ''
         ]
     );
@@ -675,10 +675,10 @@ test('usageHelpWithMessage', function (t) {
             'Usage: ./usage [options]',
             '', 
             'Options:',
-            '  --help, -h     Show usage  ',
+            '  --help, -h     Show usage',
             '  --version, -V  Show version',
-            '  --foo          foo option  ',
-            '  --bar          bar option  ',
+            '  --foo          foo option',
+            '  --bar          bar option',
             ''
         ]
     );
