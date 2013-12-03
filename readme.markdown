@@ -7,7 +7,7 @@ and -whistlz of program usage but think optstrings are a waste of time.
 
 With optimist, option parsing doesn't have to suck (as much).
 
-This fork of [optimist](https://github.com/fsubstack/node-optimist) introduces
+This fork of [optimist](https://github.com/substack/node-optimist) introduces
 the following changes:
 
 * `.require()` as synonym for `.demand()`
