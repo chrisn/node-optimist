@@ -511,6 +511,37 @@ test('usageRequiresArgFail', function (t) {
     t.end();
 });
 
+test('usageReportMissingArgValueErrorFirst', function (t) {
+    var r = checkUsage(function () {
+        opts = {
+            foo: { desc: 'foo option', alias: 'f', requiresArg: true, required: true },
+            bar: { desc: 'bar option', alias: 'b', requiresArg: true, required: true }
+        };
+
+        return optimist(['--foo'])
+          .usage('Usage: $0 [options]')
+          .options(opts)
+          .showHelpOnFail(false, "Specify --help for available options")
+          .argv;
+    });
+    t.same(
+        r.result,
+        { f : true, foo : true, _ : [], $0 : './usage' }
+    );
+
+    t.same(
+        r.errors.join('\n').split(/\n+/),
+        [
+            'Missing argument value: foo',
+            'Specify --help for available options'
+        ]
+    );
+    t.same(r.logs, []);
+    t.ok(r.exit);
+    t.end();
+});
+
+
 test('showHelpOnFailWithMessage', function (t) {
     var r = checkUsage(function () {
         return optimist('-x 10 -z 20'.split(' '))
@@ -711,9 +742,11 @@ function checkUsage (f) {
     var logs = [];
 
     console._error = console.error;
-    console.error = function (msg) { errors.push(msg); };
     console._log = console.log;
-    console.log = function (msg) { logs.push(msg); };
+
+    // The process can't output messages after it has exited
+    console.error = function (msg) { if (!exit) { errors.push(msg); } };
+    console.log = function (msg) { if (!exit) { logs.push(msg); } };
 
     var result = f();
 

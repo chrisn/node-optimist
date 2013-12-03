@@ -359,6 +359,27 @@ function Argv (processArgs, cwd) {
             );
         }
         
+        if (options.requiresArg.length > 0) {
+            missing = [];
+
+            options.requiresArg.forEach(function(key) {
+                var value = argv[key];
+
+                // minimist sets --foo value to true / --no-foo to false
+                if (value === true || value === false) {
+                    missing.push(key);
+                }
+            });
+
+            if (missing.length == 1) {
+                fail("Missing argument value: " + missing[0]);
+            }
+            else if (missing.length > 1) {
+                message = "Missing argument values: " + missing.join(", ");
+                fail(message);
+            }
+        }
+
         var missing = [];
         Object.keys(demanded).forEach(function (key) {
             if (typeof argv[key] == 'undefined') missing.push(key);
@@ -392,27 +413,6 @@ function Argv (processArgs, cwd) {
             }
             else if (unknown.length > 1) {
                 message = "Unknown arguments: " + unknown.join(", ");
-                fail(message);
-            }
-        }
-
-        if (options.requiresArg.length > 0) {
-            missing = [];
-
-            options.requiresArg.forEach(function(key) {
-                var value = argv[key];
-
-                // minimist sets --foo value to true / --no-foo to false
-                if (value === true || value === false) {
-                    missing.push(key);
-                }
-            });
-
-            if (missing.length == 1) {
-                fail("Missing argument value: " + missing[0]);
-            }
-            else if (missing.length > 1) {
-                message = "Missing argument values: " + missing.join(", ");
                 fail(message);
             }
         }
