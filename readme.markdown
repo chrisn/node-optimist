@@ -44,13 +44,13 @@ else {
 
     $ ./xup.js --rif=55 --xup=9.52
     Buy more riffiwobbles
-    
+
     $ ./xup.js --rif 12 --xup 8.1
     Sell the xupptumblers
 
 But wait! There's more! You can do short options:
 -------------------------------------------------
- 
+
 short.js:
 
 ````javascript
@@ -86,7 +86,7 @@ console.log(
 
     $ ./bool.js -s
     The cat says: meow
-    
+
     $ ./bool.js -sp
     The cat says: meow.
 
@@ -95,7 +95,7 @@ console.log(
 
 And non-hyphenated options too! Just use `argv._`!
 -------------------------------------------------
- 
+
 nonopt.js:
 
 ````javascript
@@ -110,7 +110,7 @@ console.log(argv._);
     $ ./nonopt.js -x 6.82 -y 3.35 moo
     (6.82,3.35)
     [ 'moo' ]
-    
+
     $ ./nonopt.js foo -x 0.54 bar -y 1.12 baz
     (0.54,1.12)
     [ 'foo', 'bar', 'baz' ]
@@ -131,10 +131,10 @@ console.log(argv.x / argv.y);
 ````
 
 ***
- 
+
     $ ./divide.js -x 55 -y 11
     5
-    
+
     $ node ./divide.js -x 4.91 -z 2.51
     Usage: node ./divide.js -x [num] -y [num]
 
@@ -260,10 +260,10 @@ s.on('end', function () {
 
     Missing required arguments: f
 
-    $ node line_count.js --file line_count.js 
+    $ node line_count.js --file line_count.js
     20
-    
-    $ node line_count.js -f line_count.js 
+
+    $ node line_count.js -f line_count.js
     20
 
 methods
@@ -469,8 +469,8 @@ var argv = require('optimist')
 ------------------------------
 
 Add an option (e.g., `--help`) that displays the usage string and exits the
-process. If present, the `message` parameter customises the description of the
-help option in the usage string.
+process. If present, the `description` parameter customises the description of
+the help option in the usage string.
 
 If invoked without parameters, `.help` returns the generated usage string.
 
@@ -482,7 +482,7 @@ var opts = {
     alias: 'file',
     description: 'Load a file',
     required: true
-  },
+  }
 };
 
 var argv = require('optimist')
@@ -507,9 +507,9 @@ var argv = require('optimist')
 .version(version, option, [description])
 ----------------------------------------
 
-Add an option (e.g., `--version`) that displays the given version number and
-exits the process. If present, the `message` parameter customises the
-description of the version option in the usage string.
+Add an option (e.g., `--version`) that displays the version number (given by the
+`version` parameter) and exits the process. If present, the `description`
+parameter customises the description of the version option in the usage string.
 
 ````javascript
 #!/usr/bin/env node
@@ -519,7 +519,7 @@ var opts = {
     alias: 'file',
     description: 'Load a file',
     required: true
-  },
+  }
 };
 
 var argv = require('optimist')
@@ -534,16 +534,16 @@ var argv = require('optimist')
 
 ***
 
-  $ node line_count.js --version
-  1.0
+    $ node line_count.js --version
+    1.0
 
-  $ node line_count.js --help
-  Usage: node ./line_count.js
+    $ node line_count.js --help
+    Usage: node ./line_count.js
 
-  Options:
-    --help      Show usage
-    --version   Show version
-    -f, --file  Load a file  [required]
+    Options:
+      --help      Show usage
+      --version   Show version
+      -f, --file  Load a file  [required]
 
 .showHelpOnFail(enable, [message])
 ----------------------------------
@@ -669,7 +669,7 @@ installation
 With [npm](http://github.com/isaacs/npm), just do:
 
     npm install git+https://github.com/chrisn/node-optimist.git
- 
+
 or clone this project on github:
 
     git clone https://github.com/chrisn/node-optimist.git
