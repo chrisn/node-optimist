@@ -1,6 +1,8 @@
 optimist
 ========
 
+[![Build Status](https://travis-ci.org/chrisn/node-optimist.png?branch=master)](https://travis-ci.org/chrisn/node-optimist)
+
 Optimist is a node.js library for option parsing for people who hate option
 parsing. More specifically, this module is for people who like all the --bells
 and -whistlz of program usage but think optstrings are a waste of time.
